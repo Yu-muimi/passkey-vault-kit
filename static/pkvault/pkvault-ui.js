@@ -91,7 +91,10 @@
         back.className = 'pkv pkv-modal-back';
         back.innerHTML = `<div class="pkv-card pkv-modal" role="dialog" aria-modal="true">${html}</div>`;
         const prev = document.activeElement;
-        const close = v => { back.remove(); document.removeEventListener('keydown', onKey); prev?.focus?.(); resolve(v); };
+        // sticky のあいだは、ページを離れる・読み直すときにブラウザーの確認を出す（閉じると二度と出ない画面を、うっかり消さないように）
+        const onLeave = e => { e.preventDefault(); e.returnValue = ''; };
+        if (sticky) window.addEventListener('beforeunload', onLeave);
+        const close = v => { back.remove(); document.removeEventListener('keydown', onKey); window.removeEventListener('beforeunload', onLeave); prev?.focus?.(); resolve(v); };
         const onKey = e => { if (e.key === 'Escape' && !sticky) close(null); };
         document.addEventListener('keydown', onKey);
         back.addEventListener('click', e => { if (e.target === back && !sticky) close(null); });
