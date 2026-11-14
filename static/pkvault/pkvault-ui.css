@@ -148,5 +148,9 @@
   .pkv-seg { display: grid; width: 100%; }
 }
 /* 復旧キーを控えたかの確かめ（最後の4文字） */
-.pkv-show[hidden], .pkv-confirm[hidden] { display: none; }
+.pkv-show[hidden], .pkv-confirm[hidden], .pkv-done[hidden], .pkv-ng[hidden] { display: none; }
+.pkv-ng { margin-top: 10px; }
+.pkv-done { text-align: center; }
+.pkv-done-h { margin: 6px 0 4px; font-size: 17px; color: var(--pkv-accent); }
+.pkv-done .pkv-modal-f { justify-content: center; }
 .pkv-confirm #pkv-last { max-width: 12em; letter-spacing: .12em; }

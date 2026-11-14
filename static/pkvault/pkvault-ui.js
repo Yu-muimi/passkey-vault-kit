@@ -216,21 +216,33 @@
         <p class="pkv-body">控えたことを確かめます。<b>控えた場所を見て</b>、復旧キーの<b>最後の4文字</b>を入れてください（この画面にはもう表示していません）。</p>
         <label class="pkv-label" for="pkv-last">復旧キーの最後の4文字</label>
         <input class="pkv-input mono" id="pkv-last" maxlength="8" placeholder="XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false">
-        <div class="pkv-err" role="alert"></div>
-        <div class="pkv-modal-f"><button type="button" class="pkv-btn" data-again>もう一度表示する</button><button type="button" class="pkv-btn primary" data-done>${label}</button></div></div>`;
+        <div class="pkv-note warn pkv-ng" role="alert" hidden>${IC.info}<div><b>最後の4文字が一致しません。</b>
+          控えた復旧キーが、正しく書き写せていない可能性があります。このままでは、いざというときにアカウントを取り戻せません。
+          「もう一度表示する」で見比べて、<b>正しく控え直してから</b>確かめてください。</div></div>
+        <div class="pkv-modal-f"><button type="button" class="pkv-btn" data-again>もう一度表示する</button><button type="button" class="pkv-btn primary" data-check disabled>確認する</button></div></div>
+      <div class="pkv-done" hidden>
+        <p class="pkv-done-h"><b>確認できました</b></p>
+        <p class="pkv-body">復旧キーが正しく控えられていることを確かめました。控えは、ほかの人に見られない場所に大切に保管してください。</p>
+        <div class="pkv-modal-f"><button type="button" class="pkv-btn primary" data-done>${label}</button></div></div>`;
     function wireConfirm(scope, recovery_key, done) {
       const norm = v => String(v || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
       const want = norm(recovery_key).slice(-4);
-      const show = $('.pkv-show', scope), box = $('.pkv-confirm', scope), inp = $('#pkv-last', box), err = $('.pkv-err', box);
-      $('[data-saved]', scope).onclick = () => { show.hidden = true; box.hidden = false; inp.value = ''; err.textContent = ''; inp.focus(); };
+      // 4文字を入れるまで「確認する」は押せない。一致しなければ目立つ注意、一致したら「確認できました」を見せてから進む
+      const show = $('.pkv-show', scope), box = $('.pkv-confirm', scope), inp = $('#pkv-last', box), ng = $('.pkv-ng', box), btn = $('[data-check]', box);
+      const doneBox = $('.pkv-done', scope);
+      const ready = () => { btn.disabled = norm(inp.value).length < 4; };
+      inp.oninput = () => { ng.hidden = true; ready(); };
+      $('[data-saved]', scope).onclick = () => { show.hidden = true; box.hidden = false; inp.value = ''; ng.hidden = true; ready(); inp.focus(); };
       $('[data-again]', box).onclick = () => { box.hidden = true; show.hidden = false; };
       const check = () => {
         const v = norm(inp.value);
-        if (v.length < 4 || v.slice(-4) !== want) { err.textContent = '最後の4文字が違います。控えた復旧キーを確かめてください（分からなければ「もう一度表示する」）'; return; }
-        done();
+        if (v.length < 4) return;
+        if (v.slice(-4) !== want) { ng.hidden = false; inp.select(); return; }
+        box.hidden = true; doneBox.hidden = false; $('[data-done]', doneBox).focus();
       };
-      $('[data-done]', box).onclick = check;
+      btn.onclick = check;
       inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); check(); } };
+      $('[data-done]', doneBox).onclick = () => done();
     }
     function showKeys({ user_id, recovery_key, first, recovered }, then) {
       const row = (label, value, name) => `<div class="pkv-keyrow"><div class="pkv-keylabel">${label}</div>

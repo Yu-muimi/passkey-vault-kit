@@ -82,7 +82,7 @@ app = Flask(__name__)
 pkv = PasskeyVault(app, Config(
     app_name="メモ帳",                 # パスキーの画面に出る名前
     crypto_prefix="memo/v1",           # このアプリの暗号のラベル（決めたら変えない）
-    record_kinds={"note": 5000},       # 預かる記録の種類 → 1人あたりの上限
+    record_kinds={"note": 5000},       # 預かる記録の種類 → 1人あたりの「件数」の上限（容量の上限は user_bytes_max）
     data_dir="data",
 ))
 
