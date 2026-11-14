@@ -84,16 +84,17 @@
       toastTimer = setTimeout(() => { el.hidden = true; }, 3200);
     }
     // 小窓（閉じたときに resolve する値を返す）
-    function modal(html, setup) {
+    // sticky：Esc でも外を押しても閉じない（復旧キーの表示など、決まったボタンでしか閉じない画面）
+    function modal(html, setup, { sticky = false } = {}) {
       return new Promise(resolve => {
         const back = document.createElement('div');
         back.className = 'pkv pkv-modal-back';
         back.innerHTML = `<div class="pkv-card pkv-modal" role="dialog" aria-modal="true">${html}</div>`;
         const prev = document.activeElement;
         const close = v => { back.remove(); document.removeEventListener('keydown', onKey); prev?.focus?.(); resolve(v); };
-        const onKey = e => { if (e.key === 'Escape') close(null); };
+        const onKey = e => { if (e.key === 'Escape' && !sticky) close(null); };
         document.addEventListener('keydown', onKey);
-        back.addEventListener('click', e => { if (e.target === back) close(null); });
+        back.addEventListener('click', e => { if (e.target === back && !sticky) close(null); });
         document.body.appendChild(back);
         noSubmit(back);
         $$('[data-close]', back).forEach(b => { b.onclick = () => close(null); });
@@ -457,7 +458,7 @@
       };
     }
     function keysModal({ user_id, recovery_key }) {
-      modal(`${head('新しい復旧キー')}<div class="pkv-show"><div class="pkv-body"><div class="pkv-note warn">${IC.info}<div><b>この画面を閉じると二度と表示されません。</b>今までのキーは使えなくなりました。パスキーと復旧キーを両方なくすと、運営者にもアカウントは復旧できず、中身も読めなくなります。</div></div>
+      modal(`<div class="pkv-modal-h"><h2>新しい復旧キー</h2></div><div class="pkv-show"><div class="pkv-body"><div class="pkv-note warn">${IC.info}<div><b>この画面を閉じると二度と表示されません。</b>今までのキーは使えなくなりました。パスキーと復旧キーを両方なくすと、運営者にもアカウントは復旧できず、中身も読めなくなります。</div></div>
         <form autocomplete="on"><input type="text" name="username" value="${esc(user_id)}" autocomplete="username" hidden><input type="password" name="password" value="${esc(recovery_key)}" autocomplete="new-password" hidden></form>
         <div class="pkv-keyrow"><div class="pkv-keylabel">ユーザーID</div><div class="pkv-keyval"><code class="pkv-mono">${esc(user_id)}</code></div></div>
         <div class="pkv-keyrow"><div class="pkv-keylabel">復旧キー</div><div class="pkv-keyval"><code class="pkv-mono" data-rk>${esc(recovery_key)}</code>
@@ -465,7 +466,7 @@
         <div class="pkv-modal-f"><button type="button" class="pkv-btn primary" data-saved>控えました</button></div></div>${confirmHTML('閉じる')}`, (m, close) => {
         wireConfirm(m, recovery_key, () => close(null));
         $('[data-copy]', m).onclick = async () => { try { await navigator.clipboard.writeText(recovery_key); toast('コピーしました'); } catch { toast('コピーできませんでした'); } };
-      });
+      }, { sticky: true });
     }
 
     return { boot, showLogin, showRegister, showRecover, reauth, securityPanel, toast, confirm: confirmBox, prompt: promptBox };
