@@ -1,0 +1,28 @@
+# 試験（変更を送るたびに GitHub の上で動かす）：サーバー・暗号・通し
+name: test
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: 部品を入れる
+        run: |
+          python -m venv .venv
+          .venv/bin/python -m pip install -r requirements.txt
+      - name: サーバーの試験
+        run: .venv/bin/python tests/test_server.py
+      - name: 暗号の試験
+        run: node tests/test_crypto.mjs
+      - name: 通しの試験
+        run: node tests/test_e2e.mjs

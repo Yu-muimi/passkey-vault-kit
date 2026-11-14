@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>暗号メモ</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/pkvault/pkvault-ui.css">
+<link rel="stylesheet" href="/static/notes.css">
+</head>
+<body>
+<div id="auth" hidden></div>
+
+<div id="app" class="pkv" hidden>
+  <header class="bar">
+    <h1>暗号メモ</h1>
+    <span class="sync" id="sync" aria-live="polite"></span>
+    <nav>
+      <button type="button" class="pkv-btn small" data-view="notes" aria-current="page">メモ</button>
+      <button type="button" class="pkv-btn small" data-view="settings">設定</button>
+    </nav>
+  </header>
+
+  <main id="notes" class="view">
+    <div class="tools">
+      <input class="pkv-input" id="q" type="search" placeholder="メモを探す" aria-label="メモを探す">
+      <button type="button" class="pkv-btn primary" id="new">新しいメモ</button>
+    </div>
+    <div class="cols">
+      <ul class="list" id="list" aria-label="メモの一覧"></ul>
+      <section class="editor pkv-card" id="editor" hidden>
+        <input class="pkv-input title" id="title" maxlength="120" placeholder="題名" aria-label="題名">
+        <textarea class="pkv-input body" id="body" placeholder="本文（端末で暗号化してから送ります）" aria-label="本文"></textarea>
+        <div class="ed-foot"><span class="pkv-help" id="stamp"></span><button type="button" class="pkv-btn small danger-ghost" id="del">削除</button></div>
+      </section>
+    </div>
+    <p class="empty pkv-help" id="empty" hidden>まだメモがありません。「新しいメモ」から書けます。</p>
+  </main>
+
+  <main id="settings" class="view" hidden>
+    <div class="pkv-card panel"><div id="security"></div></div>
+  </main>
+</div>
+
+<!-- 読み込む順番に意味がある：暗号 → 端末の部品 → 同期 → 画面の部品 → アプリ -->
+<script src="/pkvault/pkvault-crypto.js"></script>
+<script src="/pkvault/pkvault-client.js"></script>
+<script src="/pkvault/pkvault-store.js"></script>
+<script src="/pkvault/pkvault-ui.js"></script>
+<script src="/static/notes.js"></script>
+</body>
+</html>

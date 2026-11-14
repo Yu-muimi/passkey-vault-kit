@@ -1,0 +1,23 @@
+/* 見本アプリの見た目（色は pkvault-ui.css の変数を使う） */
+body { margin: 0; background: var(--pkv-bg); color: var(--pkv-text); }
+.bar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; padding: 12px 16px; border-bottom: 1px solid var(--pkv-line); background: var(--pkv-card); }
+.bar h1 { font-size: 18px; margin: 0; }
+.bar nav { display: flex; gap: 6px; margin-left: auto; }
+.bar nav [aria-current="page"] { border-color: var(--pkv-accent); background: var(--pkv-accent-soft); }
+.sync { font-size: 13px; color: var(--pkv-muted); }
+.view { max-width: 1100px; margin: 0 auto; padding: 16px; }
+.tools { display: flex; gap: 8px; margin-bottom: 12px; }
+.tools .pkv-input { flex: 1; min-width: 0; }
+.cols { display: grid; grid-template-columns: minmax(220px, 320px) 1fr; gap: 16px; align-items: start; }
+.list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.list button { width: 100%; min-height: 56px; text-align: left; padding: 8px 12px; border: 1px solid var(--pkv-line); border-radius: 10px;
+  background: var(--pkv-card); color: var(--pkv-text); font: inherit; cursor: pointer; display: grid; gap: 2px; }
+.list button[aria-current="true"] { border-color: var(--pkv-accent); background: var(--pkv-accent-soft); }
+.list span { font-size: 13px; color: var(--pkv-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.list b { overflow-wrap: anywhere; }
+.editor { padding: 12px; display: grid; gap: 8px; }
+.editor .title { font-weight: 600; }
+.editor .body { min-height: 50vh; resize: vertical; line-height: 1.7; }
+.ed-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.panel { padding: 20px; max-width: 720px; margin: 0 auto; }
+@media (max-width: 700px) { .cols { grid-template-columns: 1fr; } .editor .body { min-height: 40vh; } }

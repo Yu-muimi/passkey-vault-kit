@@ -1,0 +1,152 @@
+/* pkvault — 画面の部品の見た目。色・角の丸み・文字は --pkv-* の変数で変えられる（アプリの CSS で :root に書けば上書きできる）
+   目次：変数（明るい・暗い） → 土台 → ボタン・入力欄 → ログインの画面 → 小窓・通知 → 設定（区切りのある切り替え・一覧） */
+
+/* ---------------------------------------------------------------- 変数 */
+:root {
+  --pkv-bg: #f6f5f2;
+  --pkv-card: #ffffff;
+  --pkv-text: #1f2328;
+  --pkv-muted: #5c636b;
+  --pkv-line: #d5d2cb;
+  --pkv-accent: #2f6f5e;
+  --pkv-accent-text: #ffffff;
+  --pkv-accent-soft: #e3efe9;
+  --pkv-danger: #b42318;
+  --pkv-danger-soft: #fbe9e7;
+  --pkv-warn-soft: #fdf3dc;
+  --pkv-warn-line: #e5c56f;
+  --pkv-focus: #2f6f5e66;
+  --pkv-radius: 12px;
+  --pkv-font: system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Noto Sans JP", sans-serif;
+  --pkv-mono: ui-monospace, "SFMono-Regular", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --pkv-bg: #16181b; --pkv-card: #202328; --pkv-text: #e8e6e1; --pkv-muted: #a3a8ae; --pkv-line: #3a3f46;
+    --pkv-accent: #6fbfa5; --pkv-accent-text: #0e1a16; --pkv-accent-soft: #23362f;
+    --pkv-danger: #ff8a7a; --pkv-danger-soft: #3a2220; --pkv-warn-soft: #3a3120; --pkv-warn-line: #8a6d2a; --pkv-focus: #6fbfa566;
+  }
+}
+:root[data-theme="dark"] {
+  --pkv-bg: #16181b; --pkv-card: #202328; --pkv-text: #e8e6e1; --pkv-muted: #a3a8ae; --pkv-line: #3a3f46;
+  --pkv-accent: #6fbfa5; --pkv-accent-text: #0e1a16; --pkv-accent-soft: #23362f;
+  --pkv-danger: #ff8a7a; --pkv-danger-soft: #3a2220; --pkv-warn-soft: #3a3120; --pkv-warn-line: #8a6d2a; --pkv-focus: #6fbfa566;
+}
+
+/* ---------------------------------------------------------------- 土台 */
+.pkv, .pkv * { box-sizing: border-box; }
+.pkv { font-family: var(--pkv-font); color: var(--pkv-text); line-height: 1.6; }
+.pkv-card { background: var(--pkv-card); border: 1px solid var(--pkv-line); border-radius: var(--pkv-radius); }
+.pkv-ic { width: 18px; height: 18px; flex: none; }
+.pkv-mono, .pkv code { font-family: var(--pkv-mono); letter-spacing: .02em; overflow-wrap: anywhere; }
+.pkv-help { color: var(--pkv-muted); font-size: 13px; margin: 4px 0 10px; }
+.pkv-body { margin: 0 0 12px; }
+.pkv-body p { margin: 0 0 10px; }
+.pkv-body b, .pkv-note b { white-space: nowrap; }  /* 「復旧キー」などの短い言葉を、行の途中で切らない */
+.pkv-err { color: var(--pkv-danger); font-size: 14px; min-height: 1.6em; margin-top: 8px; }
+.pkv-err:empty { min-height: 0; margin: 0; }
+.pkv a { color: var(--pkv-accent); }
+
+/* ---------------------------------------------------------------- ボタン・入力欄 */
+.pkv-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 44px; padding: 8px 16px; border-radius: 10px; border: 1px solid var(--pkv-line);
+  background: var(--pkv-card); color: var(--pkv-text); font: inherit; font-size: 15px; cursor: pointer; text-align: center;
+}
+.pkv-btn:hover:not(:disabled) { border-color: var(--pkv-accent); }
+.pkv-btn:focus-visible, .pkv-input:focus-visible, .pkv-icon-btn:focus-visible, .pkv-link:focus-visible, .pkv-seg button:focus-visible { outline: 3px solid var(--pkv-focus); outline-offset: 2px; }
+.pkv-btn:disabled { opacity: .55; cursor: default; }
+.pkv-btn.primary { background: var(--pkv-accent); border-color: var(--pkv-accent); color: var(--pkv-accent-text); font-weight: 600; }
+.pkv-btn.danger { background: var(--pkv-danger); border-color: var(--pkv-danger); color: #fff; font-weight: 600; }
+.pkv-btn.danger-ghost { color: var(--pkv-danger); }
+.pkv-btn.danger-ghost:hover:not(:disabled) { border-color: var(--pkv-danger); background: var(--pkv-danger-soft); }
+.pkv-btn.big { width: 100%; min-height: 50px; }
+.pkv-btn.small { min-height: 36px; padding: 4px 12px; font-size: 14px; }
+.pkv-icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; flex: none;
+  border: 0; border-radius: 10px; background: transparent; color: var(--pkv-muted); cursor: pointer; }
+.pkv-icon-btn:hover { background: var(--pkv-accent-soft); color: var(--pkv-text); }
+.pkv-link { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; padding: 0 4px; border: 0; background: none;
+  color: var(--pkv-accent); font: inherit; font-size: 14px; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.pkv-label { display: block; font-size: 14px; font-weight: 600; margin: 12px 0 4px; }
+.pkv-input { width: 100%; min-height: 44px; padding: 8px 12px; border: 1px solid var(--pkv-line); border-radius: 10px;
+  background: var(--pkv-bg); color: var(--pkv-text); font: inherit; font-size: 16px; }
+.pkv-input.mono { font-family: var(--pkv-mono); }
+.pkv-pw { display: flex; gap: 4px; align-items: center; }
+.pkv-check { display: flex; align-items: flex-start; gap: 8px; margin: 12px 0; font-size: 14px; cursor: pointer; }
+.pkv-check input { width: 20px; height: 20px; margin: 2px 0 0; flex: none; accent-color: var(--pkv-accent); }
+.pkv-spin { width: 16px; height: 16px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: pkv-spin .8s linear infinite; flex: none; }
+@keyframes pkv-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .pkv-spin { animation-duration: 2.4s; } }
+
+/* ---------------------------------------------------------------- ログインの画面 */
+.pkv-auth { min-height: 100vh; min-height: 100dvh; display: flex; align-items: flex-start; justify-content: center;
+  padding: max(24px, env(safe-area-inset-top)) 16px 32px; background: var(--pkv-bg); }
+.pkv-auth-card { width: 100%; max-width: 440px; margin-top: min(8vh, 64px); padding: 28px 24px; }
+.pkv-logo { display: block; margin: 0 auto 8px; }
+.pkv-title { font-size: 22px; text-align: center; margin: 0 0 4px; overflow-wrap: anywhere; }
+.pkv-sub { display: flex; align-items: center; justify-content: center; gap: 6px; text-align: center; color: var(--pkv-muted); margin: 0 0 18px; font-size: 15px; }
+.pkv-form { margin: 0; }
+.pkv-form > .pkv-btn.big { margin-top: 16px; }
+.pkv-targets { display: grid; gap: 10px; margin: 16px 0 4px; }
+.pkv-targets.row { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.pkv-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 16px; margin-top: 14px; }
+.pkv-note { display: flex; gap: 10px; align-items: flex-start; padding: 12px; margin: 12px 0; border-radius: 10px;
+  background: var(--pkv-accent-soft); font-size: 14px; }
+.pkv-note .pkv-ic { margin-top: 2px; color: var(--pkv-accent); }
+.pkv-note.warn { background: var(--pkv-warn-soft); border: 1px solid var(--pkv-warn-line); }
+.pkv-note.warn .pkv-ic { color: inherit; }
+.pkv-keys { margin: 8px 0; }
+.pkv-keyrow { padding: 10px 12px; border: 1px solid var(--pkv-line); border-radius: 10px; margin: 8px 0; background: var(--pkv-bg); }
+.pkv-keylabel { font-size: 13px; color: var(--pkv-muted); }
+.pkv-keyval { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; }
+.pkv-keyval code { font-size: 17px; font-weight: 600; min-width: 0; }
+
+/* ---------------------------------------------------------------- 小窓・通知 */
+.pkv-modal-back { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center;
+  padding: 16px; background: rgb(0 0 0 / .45); }
+.pkv-modal { width: 100%; max-width: 440px; max-height: calc(100dvh - 32px); overflow: auto; padding: 16px 20px 20px; }
+.pkv-modal-h { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: -4px -8px 8px 0; }
+.pkv-modal-h h2 { font-size: 18px; margin: 0; }
+.pkv-modal-f { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+.pkv-toast { position: fixed; left: 50%; bottom: max(24px, env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 1100;
+  max-width: calc(100vw - 32px); padding: 10px 16px; border-radius: 10px; background: var(--pkv-text); color: var(--pkv-card);
+  font-family: var(--pkv-font); font-size: 14px; box-shadow: 0 4px 16px rgb(0 0 0 / .2); }
+.pkv-toast[hidden] { display: none; }
+
+/* ---------------------------------------------------------------- 設定 */
+.pkv-sec { padding: 16px 0; border-top: 1px solid var(--pkv-line); }
+.pkv-sec:first-child { border-top: 0; padding-top: 0; }
+.pkv-sec h3 { font-size: 16px; margin: 0 0 8px; }
+.pkv-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 6px 0; }
+.pkv-row > div { min-width: 0; }
+.pkv-k { font-size: 13px; color: var(--pkv-muted); overflow-wrap: anywhere; }
+.pkv-k.warn { color: var(--pkv-danger); display: flex; align-items: center; flex-wrap: wrap; gap: 0 6px; }
+.pkv-v { overflow-wrap: anywhere; }
+.pkv-badge { display: inline-block; margin-left: 8px; padding: 0 8px; border-radius: 999px; font-size: 12px; line-height: 20px;
+  background: var(--pkv-accent-soft); color: var(--pkv-text); vertical-align: 2px; }
+.pkv-list { list-style: none; margin: 0 0 12px; padding: 0; border: 1px solid var(--pkv-line); border-radius: 10px; }
+.pkv-list li { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--pkv-line); }
+.pkv-list li:first-child { border-top: 0; }
+.pkv-list.compact li { padding: 6px 12px; }
+/* 数が増える一覧（ログイン中の端末・記録）は、枠の中でスクロールする（ページ全体は一緒に動かない） */
+.pkv-list.scroll { max-height: 300px; overflow-y: auto; overscroll-behavior: contain; }
+.pkv-li-main { min-width: 0; flex: 1; }
+.pkv-li-act { display: flex; gap: 6px; flex: none; }
+.pkv-loading { display: flex; align-items: center; gap: 8px; color: var(--pkv-muted); }
+/* 区切りのある切り替え：外枠と、ボタンのあいだの線で分かれ目をはっきりさせる */
+.pkv-seg { display: inline-grid; grid-auto-flow: column; grid-auto-columns: minmax(64px, 1fr); max-width: 100%;
+  border: 1px solid var(--pkv-line); border-radius: 10px; overflow: hidden; background: var(--pkv-card); }
+.pkv-seg button { min-height: 44px; padding: 6px 12px; border: 0; border-left: 1px solid var(--pkv-line); background: transparent;
+  color: var(--pkv-text); font: inherit; font-size: 15px; cursor: pointer; }
+.pkv-seg button:first-child { border-left: 0; }
+.pkv-seg button[aria-checked="true"] { background: var(--pkv-accent); color: var(--pkv-accent-text); font-weight: 600; }
+.pkv-seg button:hover:not([aria-checked="true"]) { background: var(--pkv-accent-soft); }
+@media (max-width: 420px) {
+  .pkv-auth-card { padding: 22px 16px; }
+  .pkv-list li { flex-wrap: wrap; }
+  .pkv-li-act { width: 100%; justify-content: flex-end; }
+  .pkv-seg { display: grid; width: 100%; }
+}
+/* 復旧キーを控えたかの確かめ（最後の4文字） */
+.pkv-show[hidden], .pkv-confirm[hidden] { display: none; }
+.pkv-confirm #pkv-last { max-width: 12em; letter-spacing: .12em; }
