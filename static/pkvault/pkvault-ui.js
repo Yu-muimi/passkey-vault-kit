@@ -372,6 +372,7 @@
         </section>
         <section class="pkv-sec"><h3>ログインを保つ期間</h3>
           <p class="pkv-help">使わないままこの期間がたつと、ログアウトします（すべての端末）。「毎回」はブラウザーを閉じるとログアウトします。長くするときは本人確認が要ります。</p>
+          <p class="pkv-help">ホーム画面に追加して開いているときは、アプリを閉じてもログインが続くことがあります（「毎回」でも、使わないまま決まった日数がたつと切れます）。すぐに切りたいときは「ログアウト」を押してください。</p>
           <div class="pkv-seg" role="radiogroup" aria-label="ログインを保つ期間">${choices.map(d => `<button type="button" role="radio" aria-checked="${d === acc.session_days}" data-days="${d}">${DAY_LABEL(d)}</button>`).join('')}</div>
         </section>
         <section class="pkv-sec"><h3>パスキー</h3>
