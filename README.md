@@ -32,7 +32,7 @@ MIT licensed. Not independently audited.
 | `static/pkvault/pkvault-store.js` | 暗号化した記録の同期（差分・重なりの混ぜ方・すり替えの拒否・端末の控え） |
 | `static/pkvault/pkvault-ui.js` `.css` | 画面の部品（ログイン・登録・復旧・設定）。使わずに自分で作ってもよい |
 | `sample/` | 見本：暗号化されたメモ帳 |
-| `tests/` | 試験（サーバー71項目・通し40項目・暗号15項目＋栞との互換5項目） |
+| `tests/` | 試験（サーバー71項目・通し40項目・暗号15項目） |
 
 DB の表：`users` `credentials` `auth_log` `pow_used` `vault_keys` `devices` `records` `settings`（`pkvault/store.py`）。
 
@@ -227,8 +227,7 @@ node tests/test_crypto.mjs
 - `test_e2e.mjs`：40項目。本物のサーバーに、試験用のパスキーを持った端末を何台もつないで確かめます。
   - 登録 → 同期 → 重なり → 削除 → 送る前に閉じた変更 → すり替え → 追加 → 復旧 → 退会
   - ランダムな操作を300回重ねても全端末がそろうか（`SEED=…` で乱数を変えられる）
-- `test_crypto.mjs`：15項目。改ざんの検出など。
-  - 環境変数 `SHIORI_VAULT` に栞の `vault.js` の場所を入れると、栞と互いに開けるか（`crypto_prefix="shiori/v1"` のとき）も確かめます（5項目）。
+- `test_crypto.mjs`：15項目。改ざん・取り替えの検出、長さを隠す切り上げ、復旧キーの形、端末の鍵とサーバーの割符など。
 
 ---
 
